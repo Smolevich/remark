@@ -53,12 +53,10 @@ jobs:
           go get -u github.com/mattn/goveralls
 
       - name: run backend linters
-        uses: docker://golangci/golangci-lint
-        run: |
-          pwd
-          ls -alt
-          golangci-lint run --config .golangci.yml ./...
-        working-directory: backend
+        uses: docker://reviewdog/action-golangci-lint:v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          golangci_lint_flags: "--config=./backend/.golangci.yml ./backend"
 
       - name: run linters for examples
         run: $GITHUB_WORKSPACE/golangci-lint run --config ${GITHUB_WORKSPACE}/backend/.golangci.yml ./...
